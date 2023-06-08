@@ -3,6 +3,7 @@ from fastapi.responses import Response
 
 from mcs.common import SensorMessage
 from mcs.controller.controller import Controller
+from mcs.controller.tcp_server import TcpServer
 
 app = FastAPI(title="MCS backend test")
 controller: Controller
@@ -11,7 +12,8 @@ controller: Controller
 @app.on_event("startup")
 async def on_start():
     global controller
-    controller = Controller()
+    tcp_server = TcpServer()
+    controller = Controller(tcp_server)
 
 
 @app.post("/messages", status_code=status.HTTP_202_ACCEPTED, response_class=Response)
