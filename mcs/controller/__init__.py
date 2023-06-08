@@ -1,1 +1,1 @@
-from mcs.controller.__main__ import app
+from mcs.controller.app import app

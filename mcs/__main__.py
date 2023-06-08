@@ -13,7 +13,9 @@ arg_parser.add_argument(
 def run(args: Namespace):
     match args.type:
         case "controller":
-            subprocess.run("uvicorn mcs.controller:app --port 21234")
+            subprocess.run("uvicorn mcs.controller:app --port 21234".split())
+        case "sensor":
+            subprocess.run("python -m mcs.sensor".split())
         case _:
             print(f"type '{args.type}' is not supported yet")
 
