@@ -1,6 +1,7 @@
 import asyncio
 from asyncio import Task
 from datetime import datetime
+from random import randint
 from typing import Callable
 
 from aiohttp.client import ClientSession
@@ -15,13 +16,12 @@ counter = tqdm(unit="messages")
 async def send_message(client: ClientSession):
     time = datetime.now()
     message = SensorMessage(
-        datetime=time.strftime(time_format),
-        payload=42
+        datetime=time.strftime(time_format), payload=randint(-10, 10)
     ).json()
     await client.post(
-        'http://localhost:21234/messages',
-        headers={'Content-Type': 'application/json'},
-        data=message
+        "http://localhost:21234/messages",
+        headers={"Content-Type": "application/json"},
+        data=message,
     )
 
 
@@ -38,7 +38,7 @@ async def run():
         await keep_rps(lambda: asyncio.create_task(send_message(client)))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         asyncio.run(run())
     except KeyboardInterrupt:
