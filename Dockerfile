@@ -17,7 +17,7 @@ RUN addgroup app && useradd app -g app
 
 # Copy the venv and the app
 COPY --from=builder /app/.venv /app/.venv
-COPY ./msc ./msc
+COPY ./mcs ./mcs
 
 USER app
 EXPOSE 8000
