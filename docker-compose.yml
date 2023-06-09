@@ -1,0 +1,29 @@
+version: '3.9'
+
+x-common: &common
+  image: ghcr.io/ntdesmond/mcs-backend-test
+  env_file:
+    - .env.docker
+  restart: always
+
+services:
+  manipulator:
+    <<: *common
+    depends_on:
+      - controller
+    command: ./.venv/bin/python -m mcs.manipulator
+
+  sensor:
+    <<: *common
+    depends_on:
+      - controller
+    command: ./.venv/bin/python -m mcs.sensor
+    deploy:
+      replicas: 8
+
+  controller:
+    <<: *common
+    command: ./.venv/bin/uvicorn mcs.controller.api:app --host 0.0.0.0 --port ${CONTROLLER_HTTP_PORT}
+    hostname: ${CONTROLLER_HOSTNAME}
+    ports:
+      - "8000:${CONTROLLER_HTTP_PORT}"
