@@ -1,6 +1,6 @@
 import asyncio
 
-from mcs.common import ManipulatorMessage
+from mcs.common import ManipulatorMessage, settings
 
 
 class TcpServer:
@@ -10,7 +10,9 @@ class TcpServer:
         self.__server_task = asyncio.create_task(self.__run_server())
 
     async def __run_server(self):
-        server = await asyncio.start_server(self.__handler, "127.0.0.1", 21235)
+        server = await asyncio.start_server(
+            self.__handler, "0.0.0.0", settings.controller_tcp_port
+        )
         async with server:
             await server.serve_forever()
 

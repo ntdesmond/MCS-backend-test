@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from mcs.common import ManipulatorMessage
+from mcs.common import ManipulatorMessage, settings
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
@@ -17,7 +17,10 @@ async def read_message(reader: asyncio.StreamReader):
 
 
 async def tcp_client():
-    reader, writer = await asyncio.open_connection("127.0.0.1", 21235)
+    reader, writer = await asyncio.open_connection(
+        settings.controller_hostname,
+        settings.controller_tcp_port,
+    )
     try:
         while True:
             await read_message(reader)

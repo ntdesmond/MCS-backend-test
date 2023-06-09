@@ -6,11 +6,13 @@ from typing import Callable
 
 from aiohttp.client import ClientSession
 from tqdm import tqdm
-from mcs.common import SensorMessage, time_format
+from mcs.common import SensorMessage, time_format, settings
 
 rps = 400  # Not accurate
 
 counter = tqdm(unit="messages")
+
+url = f"http://{settings.controller_hostname}:{settings.controller_http_port}/messages"
 
 
 async def send_message(client: ClientSession):
@@ -19,7 +21,7 @@ async def send_message(client: ClientSession):
         datetime=time.strftime(time_format), payload=randint(-10, 10)
     ).json()
     await client.post(
-        "http://localhost:21234/messages",
+        url,
         headers={"Content-Type": "application/json"},
         data=message,
     )
